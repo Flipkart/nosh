@@ -17,7 +17,7 @@ import in.hatimi.nosh.Command;
  *
  */
 
-@Command("echo")
+@Command(name="echo", description="prints out the command line entered")
 public class EchoCommand {
 
     public void execute(String cmdLine) {

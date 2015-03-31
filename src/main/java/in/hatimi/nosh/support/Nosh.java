@@ -17,6 +17,7 @@
 package in.hatimi.nosh.support;
 
 import in.hatimi.nosh.Command;
+import in.hatimi.nosh.CommandContext;
 import in.hatimi.nosh.CommandSetup;
 
 import java.util.ArrayList;
@@ -54,8 +55,9 @@ public class Nosh {
         cmdMap = new HashMap<>();
         scanPkgNames = new ArrayList<>();
         cmdSetups = new ArrayList<>();
+        cmdSetups.add(new CommandContextAwareSetup(new DefaultCommandContext()));
 
-        cmdShell = new CommandShell("nosh$");
+        cmdShell = new CommandShell("nosh$ ");
         cmdShell.addListener(new CommandHandler());
     }
 
@@ -122,6 +124,51 @@ public class Nosh {
             catch(Exception exep) {
                 LOGGER.error(exep.getMessage(), exep);
             }
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Inner class that serves as the default command context
+
+    private class DefaultCommandContext implements CommandContext {
+
+        @Override
+        public List<String> listCommands() {
+            return new ArrayList<String>(cmdMap.keySet());
+        }
+
+        @Override
+        public String describeCommand(String cmdName) {
+            if(!cmdMap.containsKey(cmdName)) {
+                return null;
+            }
+            CommandExecutor exec = cmdMap.get(cmdName);
+            return exec.getDescription();
+        }
+
+        @Override
+        public void execute(String cmdName, String[] args) {
+            if(!cmdMap.containsKey(cmdName)) {
+                LOGGER.info("command not found: {}", cmdName);
+                return;
+            }
+            CommandExecutor exec = cmdMap.get(cmdName);
+            try {
+                exec.execute(null, args, cmdSetups);
+            }
+            catch(Exception exep) {
+                LOGGER.error(exep.getMessage(), exep);
+            }
+        }
+
+        @Override
+        public void printUsage(String cmdName) {
+            if(!cmdMap.containsKey(cmdName)) {
+                LOGGER.info("command not found: {}", cmdName);
+                return;
+            }
+            CommandExecutor exec = cmdMap.get(cmdName);
+            exec.printUsage();
         }
     }
 }

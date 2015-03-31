@@ -10,21 +10,20 @@
 
 package in.hatimi.nosh;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.List;
 
 /**
  * @author indroneel.das
  *
  */
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
-public @interface Command {
+public interface CommandContext {
 
-    String name() default "";
+    List<String> listCommands();
 
-    String description() default "";
+    String describeCommand(String cmdName);
+
+    void execute(String cmdName, String[] args);
+
+    void printUsage(String cmdName);
 }

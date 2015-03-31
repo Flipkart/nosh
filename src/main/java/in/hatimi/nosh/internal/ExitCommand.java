@@ -10,8 +10,6 @@
 
 package in.hatimi.nosh.internal;
 
-import com.beust.jcommander.Parameter;
-
 import in.hatimi.nosh.Command;
 
 /**
@@ -19,13 +17,10 @@ import in.hatimi.nosh.Command;
  *
  */
 
-@Command("test")
-public class TestCommand {
-
-    @Parameter(arity=1, names="--t")
-    private String tell;
+@Command(name="exit", description="terminates nosh")
+public class ExitCommand {
 
     public void execute() {
-        System.out.println(tell);
+        System.exit(0);
     }
 }

@@ -34,11 +34,13 @@ public class CommandExecutor {
 
     private Class<?> cmdCls;
     private String   name;
+    private String   description;
 
     public boolean associateWith(Class<?> cls) {
         cmdCls = cls;
         Command cmd = cmdCls.getAnnotation(Command.class);
-        name = cmd.value();
+        name = cmd.name();
+        description = cmd.description();
         if(StringUtils.isBlank(name)) {
             return false;
         }
@@ -53,6 +55,10 @@ public class CommandExecutor {
 
     public String getName() {
         return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void execute(String cmdLine, String[] params, List<CommandSetup> setupList) {
@@ -111,7 +117,7 @@ public class CommandExecutor {
         }
     }
 
-    public void showHelp() {
+    public void printUsage() {
         Class<?> paramCls = getMainParameterType();
         try {
             Object paramObj = paramCls.newInstance();

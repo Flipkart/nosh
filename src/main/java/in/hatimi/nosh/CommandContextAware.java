@@ -10,21 +10,12 @@
 
 package in.hatimi.nosh;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
  * @author indroneel.das
  *
  */
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
-public @interface Command {
+public interface CommandContextAware {
 
-    String name() default "";
-
-    String description() default "";
+    void setCommandContext(CommandContext ctxt);
 }
