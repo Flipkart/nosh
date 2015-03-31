@@ -26,11 +26,6 @@
             <version>1.7.10</version>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.10</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.3.2</version>
@@ -81,43 +76,18 @@
     </build>
 
     <distributionManagement>
-        <!-- repository>
-            <id>hatimi.orgfree.com</id>
-            <url>ftp://hatimi.orgfree.com</url>
-        </repository -->
         <repository>
-            <id>local-repo</id>
-            <url>file:///Users/indroneel.das/ownkode/hatimi/maven-repo</url>
-            <uniqueVersion>true</uniqueVersion>
+            <id>hatimi-ftp</id>
+            <url>ftp://ftp.hatimi.in/public_html/maven-repo</url>
         </repository>
+        <snapshotRepository>
+            <id>hatimi-ftp</id>
+            <url>ftp://ftp.hatimi.in/public_html/maven-snap-repo</url>
+        </snapshotRepository>
         <site>
             <id>local-site</id>
             <url>file:///Users/indroneel.das/ownkode/hatimi/site</url>
         </site>
     </distributionManagement>
-
-    <!--
-    <distributionManagement>
-        <repository>
-            <id>hatimi.orgfree.com</id>
-            <url>ftp://hatimi.orgfree.com</url>
-        </repository>
-        <repository>
-            <id>local</id>
-            <url>file:///Users/indroneel.das/ownkode/hatimi/maven-repo</url>
-            <uniqueVersion>true</uniqueVersion>
-        </repository>
-        <repository>
-            <id>archiva.internal</id>
-            <name>Internal Release Repository</name>
-            <url>http://192.168.2.10:8080/repository/internal/</url>
-        </repository>
-        <snapshotRepository>
-            <id>archiva.snapshots</id>
-            <name>Internal Snapshot Repository</name>
-            <url>http://192.168.2.10:8080/repository/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
-    -->
 
 </project>
