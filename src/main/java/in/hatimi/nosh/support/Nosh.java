@@ -19,6 +19,7 @@ package in.hatimi.nosh.support;
 import in.hatimi.nosh.Command;
 import in.hatimi.nosh.CommandContext;
 import in.hatimi.nosh.CommandSetup;
+import in.hatimi.nosh.internal.ExitCommand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,6 +79,8 @@ public class Nosh {
     }
 
     public void prepare() {
+        scanPkgNames.add(ExitCommand.class.getPackage().getName());
+
         /*
          * This is a hack around the Reflections package. FilterBuilder does not
          * seem to work with multiple package names, so the list of packages

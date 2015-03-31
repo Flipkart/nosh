@@ -20,8 +20,6 @@ import in.hatimi.nosh.support.Nosh;
 public class NoshMain {
 
     public static void main(String[] args) {
-        new Nosh()
-            .scanPackages("in.hatimi.nosh.internal")
-            .prepare();
+        new Nosh().prepare();
     }
 }

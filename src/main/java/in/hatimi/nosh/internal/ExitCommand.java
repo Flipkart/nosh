@@ -21,6 +21,7 @@ import in.hatimi.nosh.Command;
 public class ExitCommand {
 
     public void execute() {
+        System.out.println("goodbye cruel world!");
         System.exit(0);
     }
 }
