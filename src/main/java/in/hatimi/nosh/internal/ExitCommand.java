@@ -23,7 +23,7 @@ import in.hatimi.nosh.Command;
  *
  */
 
-@Command(name="exit", description="terminates nosh")
+@Command(name={"exit", "quit"}, description="terminates nosh")
 public class ExitCommand {
 
     public void execute() {

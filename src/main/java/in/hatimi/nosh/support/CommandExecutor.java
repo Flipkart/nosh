@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,16 +40,21 @@ public class CommandExecutor {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandExecutor.class);
 
     private Class<?> cmdCls;
-    private String   name;
+    private String[] names;
     private String   description;
 
     public boolean associateWith(Class<?> cls) {
         cmdCls = cls;
         Command cmd = cmdCls.getAnnotation(Command.class);
-        name = cmd.name();
+        names = cmd.name();
         description = cmd.description();
-        if(StringUtils.isBlank(name)) {
+        if(ArrayUtils.isEmpty(names)) {
             return false;
+        }
+        for(String name: names) {
+            if(StringUtils.isBlank(name)) {
+                return false;
+            }
         }
 
         //check for executable method
@@ -59,8 +65,8 @@ public class CommandExecutor {
         return true;
     }
 
-    public String getName() {
-        return name;
+    public String[] getNames() {
+        return names;
     }
 
     public String getDescription() {

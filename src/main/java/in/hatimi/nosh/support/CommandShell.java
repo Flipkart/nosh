@@ -103,13 +103,17 @@ public class CommandShell implements Runnable {
         StreamTokenizer strmtok = new StreamTokenizer(new StringReader(cmdLine));
         strmtok.resetSyntax();
         strmtok.quoteChar('"');
-        strmtok.wordChars('a', 'z');
-        strmtok.wordChars('A', 'Z');
-        strmtok.wordChars('0', '9');
-        strmtok.wordChars(':', ':');
-        strmtok.wordChars('-', '-');
-        strmtok.wordChars('_', '_');
+        strmtok.wordChars('#', '~');
+        strmtok.wordChars('!', '!');
+        //strmtok.wordChars('a', 'z');
+        //strmtok.wordChars('A', 'Z');
+        //strmtok.wordChars('0', '9');
+        //strmtok.wordChars(':', ':');
+        //strmtok.wordChars('-', '-');
+        //strmtok.wordChars('_', '_');
+        //strmtok.wordChars(':', ':');
         strmtok.whitespaceChars(' ', ' ');
+        strmtok.whitespaceChars('\t', '\t');
         while(strmtok.nextToken() != StreamTokenizer.TT_EOF) {
             if(strmtok.ttype == StreamTokenizer.TT_WORD) {
                 result.add(strmtok.sval);

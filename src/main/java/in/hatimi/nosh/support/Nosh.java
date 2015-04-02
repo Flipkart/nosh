@@ -101,7 +101,10 @@ public class Nosh {
         for(Class<?> cls : clsList) {
             CommandExecutor exec = new CommandExecutor();
             if(exec.associateWith(cls)) {
-                cmdMap.put(exec.getName(), exec);
+                String[] names = exec.getNames();
+                for(String name : names) {
+                    cmdMap.put(name, exec);
+                }
             }
         }
 

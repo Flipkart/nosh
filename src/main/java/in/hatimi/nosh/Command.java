@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 public @interface Command {
 
-    String name() default "";
+    String[] name() default "";
 
     String description() default "";
 }
