@@ -25,11 +25,19 @@
         </repository>
         <repository>
             <snapshots>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
             </snapshots>
             <id>hatimi</id>
             <name>Hatimi OSS Repository</name>
             <url>http://www.hatimi.in/maven-repo</url>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>hatimi-snap</id>
+            <name>Hatimi OSS Repository (Snap)</name>
+            <url>http://www.hatimi.in/maven-snap-repo</url>
         </repository>
     </repositories>
 
