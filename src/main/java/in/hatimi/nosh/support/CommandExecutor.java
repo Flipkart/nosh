@@ -28,8 +28,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beust.jcommander.JCommander;
-
 /**
  * @author indroneel.das
  *
@@ -42,12 +40,15 @@ public class CommandExecutor {
     private Class<?> cmdCls;
     private String[] names;
     private String   description;
+    private String   syntax;
 
     public boolean associateWith(Class<?> cls) {
         cmdCls = cls;
         Command cmd = cmdCls.getAnnotation(Command.class);
         names = cmd.name();
         description = cmd.description();
+        syntax = cmd.syntax();
+
         if(ArrayUtils.isEmpty(names)) {
             return false;
         }
@@ -73,31 +74,9 @@ public class CommandExecutor {
         return description;
     }
 
-    public void execute(String cmdLine, String[] params, List<CommandSetup> setupList) {
-        Class<?> paramCls = getMainParameterType();
-
-        Object paramObj = null;
-        if(paramCls.equals(Void.TYPE)) {
-            paramObj = null;
-        }
-        else if(paramCls.equals(String.class)) {
-            paramObj = cmdLine;
-        }
-        else if(paramCls.equals(String[].class)) {
-            paramObj = params;
-        }
-        else {
-            try {
-                paramObj = paramCls.newInstance();
-                new JCommander(paramObj, params);
-            }
-            catch(Exception exep) {
-                LOGGER.error("unable to create parameter instance", exep);
-                return;
-            }
-        }
-
+    public void execute(String[] params, List<CommandSetup> setupList) {
         Object cmdObj = null;
+        CmdLineManager clm = new CmdLineManager(cmdCls);
         try {
             cmdObj = cmdCls.newInstance();
             if(setupList != null) {
@@ -105,40 +84,37 @@ public class CommandExecutor {
                     cs.setup(cmdObj);
                 }
             }
-            if(paramObj == null) {
-                new JCommander(cmdObj, params);
+            if(!clm.applyCmdLine(cmdObj, params)) {
+                clm.printUsage(createSyntax());
+                return;
             }
         }
         catch(Exception exep) {
+            exep.printStackTrace();
             LOGGER.error("unable to create/setup command", exep);
+            clm.printUsage(createSyntax());
             return;
         }
 
-        Method mainMthd = findMainMethod();
         try {
-            if(paramObj == null) {
-                mainMthd.invoke(cmdObj);
+            Method mainMthd = findMainMethod();
+            Class<?>[] paramTypes = mainMthd.getParameterTypes();
+            if(paramTypes != null && paramTypes.length > 0) {
+                Object args = clm.getLeftoverArgs();
+                mainMthd.invoke(cmdObj, args);
             }
             else {
-                mainMthd.invoke(cmdObj, paramObj);
+                mainMthd.invoke(cmdObj);
             }
         }
         catch(Exception exep) {
             LOGGER.error("execution error", exep);
-            return;
         }
     }
 
     public void printUsage() {
-        Class<?> paramCls = getMainParameterType();
-        try {
-            Object paramObj = paramCls.newInstance();
-            new JCommander(paramObj).usage();
-        }
-        catch(Exception exep) {
-            LOGGER.error("unable to create parameter instance", exep);
-            return;
-        }
+        CmdLineManager clm = new CmdLineManager(cmdCls);
+        clm.printUsage(createSyntax());
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -170,17 +146,23 @@ public class CommandExecutor {
             if(paramTypes.length > 1) {
                 continue; //method can take at most one parameter.
             }
+            if(paramTypes.length == 1 && !paramTypes[0].equals(String[].class)) {
+                continue; //if single parameter, must be String[]
+            }
             return method;
         }
         return null;
     }
 
-    private Class<?> getMainParameterType() {
-        Method mthd = findMainMethod();
-        Class<?>[] paramTypes = mthd.getParameterTypes();
-        if(paramTypes == null || paramTypes.length == 0) {
-            return Void.TYPE;
+    private String createSyntax() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(names[0]);
+        for(int i = 1; i < names.length; i++) {
+            sb.append('|').append(names[i]);
         }
-        return paramTypes[0];
+        if(StringUtils.isNoneBlank(syntax)) {
+            sb.append(' ').append(syntax);
+        }
+        return sb.toString();
     }
 }

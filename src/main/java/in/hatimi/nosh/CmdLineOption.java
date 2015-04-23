@@ -27,12 +27,20 @@ import java.lang.annotation.Target;
  */
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
-public @interface Command {
+@Target({ElementType.FIELD})
+public @interface CmdLineOption {
 
-    String[] name() default "";
+    String name() default "";
+
+    String longName() default "";
+
+    int argCount() default 1;
 
     String description() default "";
 
-    String syntax() default "";
+    boolean required() default false;
+
+    boolean optionalArg() default false;;
+
+    char valueSeparator() default 0;
 }

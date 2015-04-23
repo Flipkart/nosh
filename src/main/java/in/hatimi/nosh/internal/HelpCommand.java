@@ -37,10 +37,15 @@ public class HelpCommand implements CommandContextAware {
         cmdCtxt = ctxt;
     }
 
-    public void execute() {
-        List<String> cmdList = cmdCtxt.listCommands();
-        for(String cmdName : cmdList) {
-            System.out.printf("%s -- %s\n", cmdName, cmdCtxt.describeCommand(cmdName));
+    public void execute(String[] args) {
+        if(args == null || args.length == 0) {
+            List<String> cmdList = cmdCtxt.listCommands();
+            for(String cmdName : cmdList) {
+                System.out.printf("%s -- %s\n", cmdName, cmdCtxt.describeCommand(cmdName));
+            }
+            return;
         }
+        System.out.println(cmdCtxt.describeCommand(args[0]));
+        cmdCtxt.printUsage(args[0]);
     }
 }

@@ -125,7 +125,7 @@ public class Nosh {
             }
             CommandExecutor exec = cmdMap.get(cmdName);
             try {
-                exec.execute(cmdLine, args, cmdSetups);
+                exec.execute(args, cmdSetups);
             }
             catch(Exception exep) {
                 LOGGER.error(exep.getMessage(), exep);
@@ -160,7 +160,7 @@ public class Nosh {
             }
             CommandExecutor exec = cmdMap.get(cmdName);
             try {
-                exec.execute(null, args, cmdSetups);
+                exec.execute(args, cmdSetups);
             }
             catch(Exception exep) {
                 LOGGER.error(exep.getMessage(), exep);

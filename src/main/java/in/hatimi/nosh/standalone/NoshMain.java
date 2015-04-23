@@ -26,6 +26,7 @@ import in.hatimi.nosh.support.Nosh;
 public class NoshMain {
 
     public static void main(String[] args) {
-        new Nosh().prepare();
+        new Nosh().scanPackages(NoshMain.class.getPackage().getName())
+        .prepare();
     }
 }

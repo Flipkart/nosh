@@ -23,10 +23,18 @@ import in.hatimi.nosh.Command;
  *
  */
 
-@Command(name="echo", description="prints out the command line entered")
+@Command(
+    name="echo",
+    description="prints out the command line entered",
+    syntax="[command line string]")
 public class EchoCommand {
 
-    public void execute(String cmdLine) {
-        System.out.println(cmdLine);
+    public void execute(String[] args) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(args[0]);
+        for(int i = 1; i < args.length; i++) {
+            sb.append(' ').append(args[i]);
+        }
+        System.out.println(sb.toString());
     }
 }
