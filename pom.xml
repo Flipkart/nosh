@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,30 +14,24 @@
         <connection>scm:git:https://github.com/hatimi/nosh</connection>
     </scm>
 
+    <properties>
+        <jdk.version>1.8</jdk.version>
+    </properties>
+
     <repositories>
         <repository>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
             <id>central</id>
-            <name>Central Repository</name>
-            <url>http://repo.maven.apache.org/maven2</url>
+            <name>libs-releases</name>
+            <url>http://artifactory.nm.flipkart.com:8081/artifactory/libs-releases</url>
         </repository>
         <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>hatimi</id>
-            <name>Hatimi OSS Repository</name>
-            <url>http://www.hatimi.in/maven-repo</url>
-        </repository>
-        <repository>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id>hatimi-snap</id>
-            <name>Hatimi OSS Repository (Snap)</name>
-            <url>http://www.hatimi.in/maven-snap-repo</url>
+            <snapshots/>
+            <id>snapshots</id>
+            <name>libs-snapshots</name>
+            <url>http://artifactory.nm.flipkart.com:8081/artifactory/libs-snapshots</url>
         </repository>
     </repositories>
 
@@ -70,7 +64,7 @@
         <dependency>
             <groupId>in.hatimi.distill</groupId>
             <artifactId>polyguice</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
@@ -81,8 +75,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.2</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -100,31 +94,29 @@
                 <configuration>
                     <attach>false</attach>
                 </configuration>
-              </plugin>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
-        <extensions>
-            <!-- Enabling the use of FTP for deployment -->
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ftp</artifactId>
-                <version>1.0-beta-6</version>
-            </extension>
-        </extensions>
     </build>
 
     <distributionManagement>
         <repository>
-            <id>hatimi-ftp</id>
-            <url>ftp://ftp.hatimi.in/public_html/maven-repo</url>
+            <id>fk-artifactory</id>
+            <name>Flipkart Artifactory</name>
+            <url>http://artifactory.nm.flipkart.com:8081/artifactory/libs-releases-local</url>
         </repository>
         <snapshotRepository>
-            <id>hatimi-ftp</id>
-            <url>ftp://ftp.hatimi.in/public_html/maven-snap-repo</url>
+            <id>fk-artifactory</id>
+            <name>Flipkart Artifactory</name>
+            <url>http://artifactory.nm.flipkart.com:8081/artifactory/libs-snapshots-local</url>
         </snapshotRepository>
-        <site>
-            <id>local-site</id>
-            <url>file:///Users/indroneel.das/ownkode/hatimi/site</url>
-        </site>
     </distributionManagement>
 
 </project>
