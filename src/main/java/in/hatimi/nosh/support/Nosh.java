@@ -16,9 +16,10 @@
 
 package in.hatimi.nosh.support;
 
-import in.hatimi.nosh.Command;
-import in.hatimi.nosh.CommandContext;
-import in.hatimi.nosh.CommandSetup;
+import in.hatimi.nosh.capi.Command;
+import in.hatimi.nosh.capi.CommandContext;
+import in.hatimi.nosh.capi.CommandOutput;
+import in.hatimi.nosh.capi.CommandSetup;
 import in.hatimi.nosh.internal.ExitCommand;
 
 import java.util.ArrayList;
@@ -48,8 +49,6 @@ public class Nosh {
 
     private List<String>                 scanPkgNames;
     private Map<String, CommandExecutor> cmdMap;
-    private CommandShell                 cmdShell;
-
     private List<CommandSetup>           cmdSetups;
 
     public Nosh() {
@@ -57,14 +56,6 @@ public class Nosh {
         scanPkgNames = new ArrayList<>();
         cmdSetups = new ArrayList<>();
         cmdSetups.add(new CommandContextAwareSetup(new DefaultCommandContext()));
-
-        cmdShell = new CommandShell("nosh$ ");
-        cmdShell.addListener(new CommandHandler());
-    }
-
-    public Nosh commandPrompt(String value) {
-        cmdShell.setPrompt(value);
-        return this;
     }
 
     public Nosh scanPackages(String... pkgs) {
@@ -78,7 +69,25 @@ public class Nosh {
         return this;
     }
 
-    public void prepare() {
+    public void startInteractive(String prompt) {
+        if(prompt == null || prompt.trim().length() == 0) {
+            prompt = "nosh$ ";
+        }
+        CommandShell cmdShell = new CommandShell(prompt);
+        prepare(cmdShell.getCommandOutput());
+        cmdShell.addListener(new CommandHandler());
+        cmdShell.start();
+    }
+
+    public CommandListener startNonInteractive(CommandOutput cmdOut) {
+        prepare(cmdOut);
+        return new CommandHandler();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Helper method
+
+    private void prepare(CommandOutput cmdOut) {
         scanPkgNames.add(ExitCommand.class.getPackage().getName());
 
         /*
@@ -99,7 +108,7 @@ public class Nosh {
 
         Set<Class<?>> clsList = reflections.getTypesAnnotatedWith(Command.class);
         for(Class<?> cls : clsList) {
-            CommandExecutor exec = new CommandExecutor();
+            CommandExecutor exec = new CommandExecutor(cmdOut);
             if(exec.associateWith(cls)) {
                 String[] names = exec.getNames();
                 for(String name : names) {
@@ -107,9 +116,6 @@ public class Nosh {
                 }
             }
         }
-
-        // And start the command shell
-        cmdShell.start();
     }
 
     ////////////////////////////////////////////////////////////////////////////

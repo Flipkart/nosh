@@ -14,26 +14,14 @@
  * the License.
  */
 
-package in.hatimi.nosh.setup;
-
-import in.hatimi.distill.polyguice.support.Polyguice;
-import in.hatimi.nosh.capi.CommandSetup;
+package in.hatimi.nosh.capi;
 
 /**
  * @author indroneel.das
  *
  */
 
-public class PolyguiceSetup implements CommandSetup {
+public interface CommandContextAware {
 
-    private Polyguice polyguice;
-
-    public PolyguiceSetup(Polyguice pj) {
-        polyguice = pj;
-    }
-
-    @Override
-    public void setup(Object command) throws Exception {
-        polyguice.getComponentContext().inject(command);
-    }
+    void setCommandContext(CommandContext ctxt);
 }
