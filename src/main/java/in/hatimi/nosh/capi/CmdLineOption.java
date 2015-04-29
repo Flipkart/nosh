@@ -40,7 +40,7 @@ public @interface CmdLineOption {
 
     boolean required() default false;
 
-    boolean optionalArg() default false;;
+    boolean optionalArg() default false;
 
     char valueSeparator() default 0;
 }

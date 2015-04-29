@@ -97,7 +97,12 @@ class CmdLineManager {
         if(clo == null) {
             return null;
         }
-        Option option = new Option(clo.name(), clo.longName(), clo.argCount() > 0, clo.description());
+        Option option = new Option(clo.name(), clo.description());
+        //Option option = new Option(clo.name(), clo.longName(), clo.argCount() > 0, clo.description());
+        if(StringUtils.isNotBlank(clo.longName())) {
+            option.setLongOpt(clo.longName());
+        }
+        //option.set`
         option.setArgs(clo.argCount());
         option.setRequired(clo.required());
         option.setOptionalArg(clo.optionalArg());
@@ -117,6 +122,14 @@ class CmdLineManager {
             nameToUse = clo.longName();
         }
 
+        if(clo.argCount() == 0) {
+            if(cmdLine.hasOption(nameToUse)) {
+                return injectBoolean(target, field, true);
+            }
+            else {
+                return injectBoolean(target, field, false);
+            }
+        }
         if(clo.argCount() == 1) {
             String value = cmdLine.getOptionValue(nameToUse);
             if(value != null) {
@@ -153,27 +166,40 @@ class CmdLineManager {
     }
 
     private boolean injectString(Object target, Field field, String value) {
-        if(field.getType().isAssignableFrom(Boolean.class)) {
+        if(field.getType().equals(Boolean.class) || field.getType().equals(Boolean.TYPE)) {
             Boolean vobj = new Boolean(value);
             return injectImpl(target, field, vobj);
         }
-        if(field.getType().isAssignableFrom(Double.class)) {
+        if(field.getType().equals(Double.class) || field.getType().equals(Double.TYPE)) {
             Double vobj = Double.valueOf(value);
             return injectImpl(target, field, vobj);
         }
-        if(field.getType().isAssignableFrom(Float.class)) {
+        if(field.getType().equals(Float.class) || field.getType().equals(Float.TYPE)) {
             Float vobj = Float.valueOf(value);
             return injectImpl(target, field, vobj);
         }
-        if(field.getType().isAssignableFrom(Long.class)) {
+        if(field.getType().equals(Long.class) || field.getType().equals(Long.TYPE)) {
             Long vobj = Long.valueOf(value);
             return injectImpl(target, field, vobj);
         }
-        if(field.getType().isAssignableFrom(Integer.class)) {
+        if(field.getType().equals(Integer.class) || field.getType().equals(Integer.TYPE)) {
             Integer vobj = Integer.valueOf(value);
             return injectImpl(target, field, vobj);
         }
-        if(field.getType().isAssignableFrom(String.class)) {
+        if(field.getType().equals(String.class)) {
+            return injectImpl(target, field, value);
+        }
+        if(field.getType().equals(byte[].class)) {
+            return injectImpl(target, field, value.getBytes());
+        }
+        if(field.getType().equals(char[].class)) {
+            return injectImpl(target, field, value.toCharArray());
+        }
+        return false;
+    }
+
+    private boolean injectBoolean(Object target, Field field, Boolean value) {
+        if(field.getType().equals(Boolean.class) || field.getType().equals(Boolean.TYPE)) {
             return injectImpl(target, field, value);
         }
         return false;
