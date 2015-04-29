@@ -20,6 +20,7 @@ import in.hatimi.nosh.capi.Command;
 import in.hatimi.nosh.capi.CommandContext;
 import in.hatimi.nosh.capi.CommandContextAware;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,9 +41,17 @@ public class HelpCommand implements CommandContextAware {
     public void execute(String[] args) {
         if(args == null || args.length == 0) {
             List<String> cmdList = cmdCtxt.listCommands();
+            Collections.sort(cmdList);
+            int maxWidth = 0;
             for(String cmdName : cmdList) {
-                System.out.printf("%s -- %s\n", cmdName, cmdCtxt.describeCommand(cmdName));
+                if(cmdName.length() > maxWidth) {
+                    maxWidth = cmdName.length();
+                }
             }
+            for(String cmdName : cmdList) {
+                System.out.printf("%-" + maxWidth +"s : %s\n", cmdName, cmdCtxt.describeCommand(cmdName));
+            }
+            System.out.println("\ntype help <command> to get help on a specific command");
             return;
         }
         System.out.println(cmdCtxt.describeCommand(args[0]));
