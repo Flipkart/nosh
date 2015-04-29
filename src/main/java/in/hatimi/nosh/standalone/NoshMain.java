@@ -27,6 +27,6 @@ public class NoshMain {
 
     public static void main(String[] args) {
         new Nosh().scanPackages(NoshMain.class.getPackage().getName())
-        .prepare();
+        .startInteractive(null);
     }
 }

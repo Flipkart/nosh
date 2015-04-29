@@ -14,26 +14,33 @@
  * the License.
  */
 
-package in.hatimi.nosh.setup;
+package in.hatimi.nosh.capi;
 
-import in.hatimi.distill.polyguice.support.Polyguice;
-import in.hatimi.nosh.capi.CommandSetup;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author indroneel.das
  *
  */
 
-public class PolyguiceSetup implements CommandSetup {
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD})
+public @interface CmdLineOption {
 
-    private Polyguice polyguice;
+    String name() default "";
 
-    public PolyguiceSetup(Polyguice pj) {
-        polyguice = pj;
-    }
+    String longName() default "";
 
-    @Override
-    public void setup(Object command) throws Exception {
-        polyguice.getComponentContext().inject(command);
-    }
+    int argCount() default 1;
+
+    String description() default "";
+
+    boolean required() default false;
+
+    boolean optionalArg() default false;;
+
+    char valueSeparator() default 0;
 }

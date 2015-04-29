@@ -16,6 +16,8 @@
 
 package in.hatimi.nosh.support;
 
+import in.hatimi.nosh.capi.CommandOutput;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -47,6 +49,10 @@ public class CommandShell implements Runnable {
 
     public void setPrompt(String value) {
         prompt = value;
+    }
+
+    public CommandOutput getCommandOutput() {
+        return new CommandOutputImpl();
     }
 
     public void addListener(CommandListener cl) {
@@ -141,6 +147,27 @@ public class CommandShell implements Runnable {
                 LOGGER.error("command execution failed", exep);
                 continue;
             }
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Inner class that implements the CommandOutput for this shell
+
+    private class CommandOutputImpl implements CommandOutput {
+
+        @Override
+        public void print(Object obj) {
+            System.out.print(obj);
+        }
+
+        @Override
+        public void println(Object obj) {
+            System.out.println(obj);
+        }
+
+        @Override
+        public void printf(String spec, Object... items) {
+            System.out.printf(spec, items);
         }
     }
 }

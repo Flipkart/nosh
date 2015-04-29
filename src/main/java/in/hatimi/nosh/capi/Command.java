@@ -14,22 +14,25 @@
  * the License.
  */
 
-package in.hatimi.nosh;
+package in.hatimi.nosh.capi;
 
-import java.util.List;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author indroneel.das
  *
  */
 
-public interface CommandContext {
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE})
+public @interface Command {
 
-    List<String> listCommands();
+    String[] name() default "";
 
-    String describeCommand(String cmdName);
+    String description() default "";
 
-    void execute(String cmdName, String[] args);
-
-    void printUsage(String cmdName);
+    String syntax() default "";
 }

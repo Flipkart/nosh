@@ -14,33 +14,14 @@
  * the License.
  */
 
-package in.hatimi.nosh;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package in.hatimi.nosh.capi;
 
 /**
  * @author indroneel.das
  *
  */
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD})
-public @interface CmdLineOption {
+public interface CommandSetup {
 
-    String name() default "";
-
-    String longName() default "";
-
-    int argCount() default 1;
-
-    String description() default "";
-
-    boolean required() default false;
-
-    boolean optionalArg() default false;;
-
-    char valueSeparator() default 0;
+    void setup(Object command) throws Exception;
 }

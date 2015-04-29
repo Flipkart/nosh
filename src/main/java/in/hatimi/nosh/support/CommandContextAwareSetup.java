@@ -16,9 +16,9 @@
 
 package in.hatimi.nosh.support;
 
-import in.hatimi.nosh.CommandContext;
-import in.hatimi.nosh.CommandContextAware;
-import in.hatimi.nosh.CommandSetup;
+import in.hatimi.nosh.capi.CommandContext;
+import in.hatimi.nosh.capi.CommandContextAware;
+import in.hatimi.nosh.capi.CommandSetup;
 
 /**
  * @author indroneel.das

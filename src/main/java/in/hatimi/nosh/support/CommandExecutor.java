@@ -16,8 +16,10 @@
 
 package in.hatimi.nosh.support;
 
-import in.hatimi.nosh.Command;
-import in.hatimi.nosh.CommandSetup;
+import in.hatimi.nosh.capi.Command;
+import in.hatimi.nosh.capi.CommandOutput;
+import in.hatimi.nosh.capi.CommandOutputAware;
+import in.hatimi.nosh.capi.CommandSetup;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -37,10 +39,15 @@ public class CommandExecutor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommandExecutor.class);
 
-    private Class<?> cmdCls;
-    private String[] names;
-    private String   description;
-    private String   syntax;
+    private CommandOutput cmdOut;
+    private Class<?>      cmdCls;
+    private String[]      names;
+    private String        description;
+    private String        syntax;
+
+    public CommandExecutor(CommandOutput out) {
+        cmdOut = out;
+    }
 
     public boolean associateWith(Class<?> cls) {
         cmdCls = cls;
@@ -97,6 +104,9 @@ public class CommandExecutor {
         }
 
         try {
+            if(cmdObj instanceof CommandOutputAware) {
+                ((CommandOutputAware) cmdObj).setCommandOutput(cmdOut);
+            }
             Method mainMthd = findMainMethod();
             Class<?>[] paramTypes = mainMthd.getParameterTypes();
             if(paramTypes != null && paramTypes.length > 0) {
