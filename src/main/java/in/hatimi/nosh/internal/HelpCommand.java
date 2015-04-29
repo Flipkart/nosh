@@ -16,9 +16,9 @@
 
 package in.hatimi.nosh.internal;
 
-import in.hatimi.nosh.Command;
-import in.hatimi.nosh.CommandContext;
-import in.hatimi.nosh.CommandContextAware;
+import in.hatimi.nosh.capi.Command;
+import in.hatimi.nosh.capi.CommandContext;
+import in.hatimi.nosh.capi.CommandContextAware;
 
 import java.util.List;
 

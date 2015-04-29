@@ -16,7 +16,7 @@
 
 package in.hatimi.nosh.support;
 
-import in.hatimi.nosh.CmdLineOption;
+import in.hatimi.nosh.capi.CmdLineOption;
 
 import java.lang.reflect.Field;
 import java.util.Properties;
@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 
-public class CmdLineManager {
+class CmdLineManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CmdLineManager.class);
 

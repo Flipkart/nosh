@@ -14,14 +14,22 @@
  * the License.
  */
 
-package in.hatimi.nosh;
+package in.hatimi.nosh.capi;
+
+import java.util.List;
 
 /**
  * @author indroneel.das
  *
  */
 
-public interface CommandContextAware {
+public interface CommandContext {
 
-    void setCommandContext(CommandContext ctxt);
+    List<String> listCommands();
+
+    String describeCommand(String cmdName);
+
+    void execute(String cmdName, String[] args);
+
+    void printUsage(String cmdName);
 }

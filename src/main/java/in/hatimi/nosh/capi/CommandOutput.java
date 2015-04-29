@@ -14,14 +14,18 @@
  * the License.
  */
 
-package in.hatimi.nosh;
+package in.hatimi.nosh.capi;
 
 /**
  * @author indroneel.das
  *
  */
 
-public interface CommandSetup {
+public interface CommandOutput {
 
-    void setup(Object command) throws Exception;
+    void print(Object obj);
+
+    void println(Object obj);
+
+    void printf(String spec, Object... items);
 }

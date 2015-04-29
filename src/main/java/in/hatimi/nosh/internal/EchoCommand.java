@@ -16,7 +16,7 @@
 
 package in.hatimi.nosh.internal;
 
-import in.hatimi.nosh.Command;
+import in.hatimi.nosh.capi.Command;
 
 /**
  * @author indroneel.das
